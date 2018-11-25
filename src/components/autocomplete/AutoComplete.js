@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import tvShows from "./tv-shows.js";
 import PossibleMatches from "./PossibleMatches.js";
 import SelectedMatch from "./SelectedMatch.js";
 import SelectedMatches from "./SelectedMatches.js";
@@ -18,7 +17,6 @@ class AutoComplete extends Component {
     // Bind stuff
     this.handleOnDeleteClick = this.handleOnDeleteClick.bind(this);
     this.state = {
-      allItems: tvShows,
       matchedItems: ["Seinfed", "Sherlock"],
       possibleMatches: [],
       currentSearchValue: "",
@@ -42,7 +40,7 @@ class AutoComplete extends Component {
     });
 
     if (currentSearchInputValue.length > 0) {
-      let filteredItems = this.state.allItems.filter(function(item) {
+      let filteredItems = this.props.allItems.filter(function(item) {
         return item
           .toLowerCase()
           .includes(currentSearchInputValue.toLowerCase());
@@ -68,20 +66,26 @@ class AutoComplete extends Component {
           });
         }
       }
-    } else if (
-      e.keyCode === DOWN_ARROW_KEYCODE &&
-      this.state.possibleMatches.length > 0
-    ) {
-      if (
-        this.state.currentlyHighlightedPosition >=
-        this.state.possibleMatches.length - 1
-      )
-        return;
+    } else if (e.keyCode === DOWN_ARROW_KEYCODE ) {
+      if(!this.state.currentSearchValue) {this.setState({possibleMatches: this.props.allItems})}
+      if(this.state.possibleMatches.length > 0) {
 
-      this.setState({
-        currentlyHighlightedPosition:
-          this.state.currentlyHighlightedPosition + 1
-      });
+          if (!this.state.currentSearchValue || !this.state.currentSearchValue.trim()) {
+              this.setState({
+                  possibleMatches: this.props.allItems
+              })
+          }
+          if (
+              this.state.currentlyHighlightedPosition >=
+              this.state.possibleMatches.length - 1
+          )
+              return;
+
+          this.setState({
+              currentlyHighlightedPosition:
+                  this.state.currentlyHighlightedPosition + 1
+          });
+      }
     } else if (
       e.keyCode === UP_ARROW_KEYCODE &&
       this.state.possibleMatches.length > 0
