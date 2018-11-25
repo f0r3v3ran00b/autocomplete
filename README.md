@@ -1,3 +1,11 @@
+## Credits:
+```javascript
+credits: {
+    styles: http://loopj.com/jquery-tokeninput/
+}
+```
+- jQuery tokeninput [http://loopj.com/jquery-tokeninput/]
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
