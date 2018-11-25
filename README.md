@@ -1,7 +1,12 @@
 ## Credits:
 ```javascript
 credits: {
-    styles: http://loopj.com/jquery-tokeninput/
+    styles: [
+        {
+            name: jQuery Tokeninput
+            url: http://loopj.com/jquery-tokeninput/
+        }
+    ]
 }
 ```
 - jQuery tokeninput [http://loopj.com/jquery-tokeninput/]
