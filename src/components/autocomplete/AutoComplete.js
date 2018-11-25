@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import PossibleMatches from "./PossibleMatches.js";
-import SelectedMatch from "./SelectedMatch.js";
 import SelectedMatches from "./SelectedMatches.js";
 
 import "./autocomplete.css";
@@ -67,7 +65,9 @@ class AutoComplete extends Component {
         }
       }
     } else if (e.keyCode === DOWN_ARROW_KEYCODE ) {
-      if(!this.state.currentSearchValue) {this.setState({possibleMatches: this.props.allItems})}
+      // Allow selecting from all items when nothing typed in.
+      if(!this.state.currentSearchValue || this.state.currentSearchValue.trim().length === 0) {this.setState({possibleMatches: this.props.allItems})}
+
       if(this.state.possibleMatches.length > 0) {
 
           if (!this.state.currentSearchValue || !this.state.currentSearchValue.trim()) {
