@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import PossibleMatches from "./PossibleMatches.js";
 import SelectedMatches from "./SelectedMatches.js";
 
@@ -13,9 +13,13 @@ class AutoComplete extends Component {
   constructor(props) {
     super(props);
     // Bind stuff
-    this.handleOnDeleteClick = this.handleOnDeleteClick.bind(this);
+    this.handleOnDeleteClick = this
+      .handleOnDeleteClick
+      .bind(this);
     this.state = {
-      matchedItems: ["Seinfed", "Sherlock"],
+      matchedItems: [
+        "Seinfed", "Sherlock"
+      ],
       possibleMatches: [],
       currentSearchValue: "",
       currentlyHighlightedPosition: DEFAULT_UNHIGHLIGHTED_INDEX
@@ -25,29 +29,56 @@ class AutoComplete extends Component {
   handleOnDeleteClick(match) {
     console.log(`clicked on: ${match}`);
     this.setState({
-      matchedItems: this.state.matchedItems.filter(item => {
-        return item !== match;
-      })
+      matchedItems: this
+        .state
+        .matchedItems
+        .filter(item => {
+          return item !== match;
+        })
     });
+  }
+
+  _handleSelectItem(index) { // For mouse stuff
+    // If in array already, do nothing
+    if (this.state.matchedItems.includes(this.state.possibleMatches[index])) {
+      return;
+    }
+
+    let newItems = [];
+    newItems.push(this.state.possibleMatches[index]);
+    this.setState({
+      matchedItems: this
+        .state
+        .matchedItems
+        .concat(newItems),
+      currentSearchValue: "",
+      possibleMatches: [],
+      currentlyHighlightedPosition: DEFAULT_UNHIGHLIGHTED_INDEX
+    })
+  }
+
+  handleItemSelect(idx) {
+    console.log(`Item selected...${this.state.possibleMatches[idx]}`);
+    this.setState({currentlyHighlightedPosition: idx});
+    this._handleSelectItem(idx);
   }
 
   handleSearchChange(e) {
     let currentSearchInputValue = e.target.value;
-    this.setState({
-      currentSearchValue: currentSearchInputValue
-    });
+    this.setState({currentSearchValue: currentSearchInputValue});
 
     if (currentSearchInputValue.length > 0) {
-      let filteredItems = this.props.allItems.filter(function(item) {
-        return item
-          .toLowerCase()
-          .includes(currentSearchInputValue.toLowerCase());
-      });
-      this.setState({
-        possibleMatches: filteredItems
-      });
+      let filteredItems = this
+        .props
+        .allItems
+        .filter(function (item) {
+          return item
+            .toLowerCase()
+            .includes(currentSearchInputValue.toLowerCase());
+        });
+      this.setState({possibleMatches: filteredItems});
     } else {
-      this.setState({ possibleMatches: [] });
+      this.setState({possibleMatches: []});
     }
   }
 
@@ -57,68 +88,56 @@ class AutoComplete extends Component {
         console.log(`No more chars to delete`);
         if (this.state.matchedItems.length > 0) {
           this.setState({
-            matchedItems: this.state.matchedItems.slice(
-              0,
-              this.state.matchedItems.length - 1
-            )
+            matchedItems: this
+              .state
+              .matchedItems
+              .slice(0, this.state.matchedItems.length - 1)
           });
         }
       }
-    } else if (e.keyCode === DOWN_ARROW_KEYCODE ) {
+    } else if (e.keyCode === DOWN_ARROW_KEYCODE) {
       // Allow selecting from all items when nothing typed in.
-      if(!this.state.currentSearchValue || this.state.currentSearchValue.trim().length === 0) {this.setState({possibleMatches: this.props.allItems})}
-
-      if(this.state.possibleMatches.length > 0) {
-
-          if (!this.state.currentSearchValue || !this.state.currentSearchValue.trim()) {
-              this.setState({
-                  possibleMatches: this.props.allItems
-              })
-          }
-          if (
-              this.state.currentlyHighlightedPosition >=
-              this.state.possibleMatches.length - 1
-          )
-              return;
-
-          this.setState({
-              currentlyHighlightedPosition:
-                  this.state.currentlyHighlightedPosition + 1
-          });
+      if (!this.state.currentSearchValue || this.state.currentSearchValue.trim().length === 0) {
+        this.setState({possibleMatches: this.props.allItems})
       }
-    } else if (
-      e.keyCode === UP_ARROW_KEYCODE &&
-      this.state.possibleMatches.length > 0
-    ) {
-      if (
-        this.state.currentlyHighlightedPosition <= DEFAULT_UNHIGHLIGHTED_INDEX
-      ) {
+
+      if (this.state.possibleMatches.length > 0) {
+
+        if (!this.state.currentSearchValue || !this.state.currentSearchValue.trim()) {
+          this.setState({possibleMatches: this.props.allItems})
+        }
+        if (this.state.currentlyHighlightedPosition >= this.state.possibleMatches.length - 1) 
+          return;
+        
+        this.setState({
+          currentlyHighlightedPosition: this.state.currentlyHighlightedPosition + 1
+        });
+      }
+    } else if (e.keyCode === UP_ARROW_KEYCODE && this.state.possibleMatches.length > 0) {
+      if (this.state.currentlyHighlightedPosition <= DEFAULT_UNHIGHLIGHTED_INDEX) {
         // -1 being the default state
         return;
       }
 
       this.setState({
-        currentlyHighlightedPosition:
-          this.state.currentlyHighlightedPosition - 1
+        currentlyHighlightedPosition: this.state.currentlyHighlightedPosition - 1
       });
     } else if (e.keyCode === ENTER_KEYCODE) {
-      if (this.state.currentlyHighlightedPosition < 0) return; //  Don't add blanks
-
+      if (this.state.currentlyHighlightedPosition < 0) 
+        return; //  Don't add blanks
+      
       // If in array already, do nothing
-      if (
-        this.state.matchedItems.includes(
-          this.state.possibleMatches[this.state.currentlyHighlightedPosition]
-        )
-      ) {
+      if (this.state.matchedItems.includes(this.state.possibleMatches[this.state.currentlyHighlightedPosition])) {
         return;
       }
 
       let newItems = [];
-      newItems.push(
-        this.state.possibleMatches[this.state.currentlyHighlightedPosition]
-      );
+      newItems.push(this.state.possibleMatches[this.state.currentlyHighlightedPosition]);
       this.setState({
-        matchedItems: this.state.matchedItems.concat(newItems),
+        matchedItems: this
+          .state
+          .matchedItems
+          .concat(newItems),
         currentSearchValue: "",
         possibleMatches: [],
         currentlyHighlightedPosition: DEFAULT_UNHIGHLIGHTED_INDEX
@@ -134,16 +153,19 @@ class AutoComplete extends Component {
             matchedItems={this.state.matchedItems}
             handleOnDeleteClick={this.handleOnDeleteClick}
             currentSearchValue={this.state.currentSearchValue}
-            handleSearchChange={this.handleSearchChange.bind(this)}
-            handleKeyDown={this.handleKeyDown.bind(this)}
-          />
+            handleSearchChange={this
+            .handleSearchChange
+            .bind(this)}
+            handleKeyDown={this
+            .handleKeyDown
+            .bind(this)}/>
 
           <PossibleMatches
+            handleItemSelect={this
+            .handleItemSelect
+            .bind(this)}
             possibleMatches={this.state.possibleMatches}
-            currentlyHighlightedPosition={
-              this.state.currentlyHighlightedPosition
-            }
-          />
+            currentlyHighlightedPosition={this.state.currentlyHighlightedPosition}/>
         </div>
       </div>
     );
